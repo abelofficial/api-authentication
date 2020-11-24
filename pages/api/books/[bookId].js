@@ -13,34 +13,38 @@ const handler = nc({ onError, onNoMatch })
   .use(cors())
 
   .get(async (req, res) => {
+    const { bookId } = req.query;
     try {
       res.status(200).json({ message: "Not implemented" });
     } catch (error) {
-      throw new Error("Problem getting book");
+      throw new Error(`Problem getting book ${bookId}`);
     }
   })
 
   .patch(async (req, res) => {
+    const { bookId } = req.query;
     try {
       res.status(200).json({ message: "Not implemented" });
     } catch (error) {
-      throw new Error("Problem updating field in book");
+      throw new Error(`Problem updating fields in book ${bookId}`);
     }
   })
 
   .put(async (req, res) => {
+    const { bookId } = req.query;
     try {
       res.status(200).json({ message: "Not implemented" });
     } catch (error) {
-      throw new Error("Problem updating book");
+      throw new Error(`Problem updating book ${bookId}`);
     }
   })
 
   .delete(async (req, res) => {
+    const { bookId } = req.query;
     try {
       res.status(200).json({ message: "Not implemented" });
     } catch (error) {
-      throw new Error("Problem getting book");
+      throw new Error(`Problem deleting book ${bookId}`);
     }
   });
 
