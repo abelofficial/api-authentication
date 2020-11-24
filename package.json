@@ -1,0 +1,14 @@
+{
+  "name": "api-authentication",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "start": "next start",
+    "build": "next build"
+  },
+  "keywords": [],
+  "author": "Abel Sintaro",
+  "license": "ISC"
+}
