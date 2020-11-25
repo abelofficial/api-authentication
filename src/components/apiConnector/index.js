@@ -10,7 +10,7 @@ import Box from "@material-ui/core/Box";
 
 // Core components
 import Request from "./request";
-import Response from "./response";
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -84,7 +84,7 @@ const apiConnector = (params) => {
           <Request />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
-          <Response />
+          Item Two
         </TabPanel>
       </SwipeableViews>
     </div>

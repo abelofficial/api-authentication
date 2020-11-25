@@ -3,10 +3,10 @@ const theme = (mode = "light") => {
     palette: {
       type: mode,
       primary: {
-        main: mode === "light" ? "#000000" : "#BA000D",
+        main: "#BA000D",
       },
       secondary: {
-        main: "#ffc400",
+        main: mode === "light" ? "#000000" : "#ffc400",
       },
     },
     typography: {

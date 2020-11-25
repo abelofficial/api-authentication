@@ -13,13 +13,18 @@
   "license": "ISC",
   "dependencies": {
     "@material-ui/core": "^4.11.1",
+    "@material-ui/icons": "^4.9.1",
+    "axios": "^0.21.0",
     "cors": "^2.8.5",
+    "lodash": "^4.17.20",
     "next": "^10.0.2",
     "next-connect": "^0.9.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-json-editor-ajrm": "^2.5.13",
     "react-swipeable-views": "^0.13.9",
     "sqlite": "^4.0.17",
-    "sqlite3": "^5.0.0"
+    "sqlite3": "^5.0.0",
+    "uuid": "^8.3.1"
   }
 }

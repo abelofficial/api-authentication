@@ -35,6 +35,7 @@ const handler = nc({ onError, onNoMatch })
   })
 
   .post(async (req, res) => {
+    console.log(req);
     try {
       res.status(200).json({ message: "Not implemented" });
     } catch (error) {
