@@ -6,7 +6,7 @@ function onError(err, req, res, next) {
 }
 
 function onNoMatch(req, res) {
-  res.status(405).json({ message: "Method not allowed." });
+  res.status(404).json({ message: "The requested endpoint is not supported." });
 }
 
 const handler = nc({ onError, onNoMatch })
@@ -14,9 +14,11 @@ const handler = nc({ onError, onNoMatch })
 
   .get(async (req, res) => {
     const { authorId } = req.query;
-    console.log(authorId);
+
     try {
-      res.status(200).json({ message: "Not implemented" });
+      res.status(200).json({
+        message: `You can't get details about the author ${authorId} at the moment`,
+      });
     } catch (error) {
       throw new Error(`Problem getting author ${authorId}`);
     }
@@ -25,7 +27,9 @@ const handler = nc({ onError, onNoMatch })
   .patch(async (req, res) => {
     const { authorId } = req.query;
     try {
-      res.status(200).json({ message: "Not implemented" });
+      res.status(200).json({
+        message: `You can't update details about the author ${authorId} at the moment`,
+      });
     } catch (error) {
       throw new Error(`Problem updating fields in author ${authorId}`);
     }
@@ -34,7 +38,9 @@ const handler = nc({ onError, onNoMatch })
   .put(async (req, res) => {
     const { authorId } = req.query;
     try {
-      res.status(200).json({ message: "Not implemented" });
+      res.status(200).json({
+        message: `You can't  update  the author ${authorId} at the moment`,
+      });
     } catch (error) {
       throw new Error(`Problem updating author ${authorId}`);
     }
@@ -43,7 +49,9 @@ const handler = nc({ onError, onNoMatch })
   .delete(async (req, res) => {
     const { authorId } = req.query;
     try {
-      res.status(200).json({ message: "Not implemented" });
+      res.status(200).json({
+        message: `You can't delete the author ${authorId} at the moment`,
+      });
     } catch (error) {
       throw new Error(`Problem deleting author ${authorId}`);
     }

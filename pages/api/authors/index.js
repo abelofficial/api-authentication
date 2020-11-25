@@ -9,7 +9,7 @@ function onError(err, req, res, next) {
 }
 
 function onNoMatch(req, res) {
-  res.status(405).json({ message: "Method not allowed." });
+  res.status(404).json({ message: "The requested endpoint is not supported." });
 }
 
 async function getDB(req, res) {

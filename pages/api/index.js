@@ -13,23 +13,18 @@ const handler = nc({ onError, onNoMatch })
   .use(cors())
 
   .get(async (req, res) => {
+    const { authorId } = req.query;
+    console.log(authorId);
     try {
-      res.status(200).json({ message: "Not implemented" });
+      res
+        .status(200)
+        .json({
+          message:
+            "Welcome to the api tester. You can start sending requests to the /api/authors or api/books end points.",
+        });
     } catch (error) {
-      throw new Error("Problem getting books");
-    }
-  })
-
-  .post(async (req, res) => {
-    try {
-      res.status(200).json({ message: "Not implemented" });
-    } catch (error) {
-      throw new Error("Problem adding books");
+      throw new Error(`Problem getting the api landing page. :( )`);
     }
   });
-
-//   .options(async (req, res) => {
-//     res.status(200).json({ message: "Not implemented" });
-//   });
 
 export default handler;

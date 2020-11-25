@@ -62,7 +62,7 @@ const request = (params) => {
     Object.keys(headersObj).forEach((id) => {
       headers[headersObj[id].key] = headersObj[id].value;
     });
-    console.log(headers);
+
     try {
       const reqResponse = await axios({
         method: method,
