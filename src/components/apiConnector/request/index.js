@@ -82,11 +82,10 @@ const request = (params) => {
         body: error.response.data,
       });
     }
-
-    console.log(reqResponse.status);
   };
+  console.log(body);
   return (
-    <Grid container direction="column" spacing={3}>
+    <Grid container direction='column' spacing={3}>
       <Grid item>
         <Input
           method={method}
