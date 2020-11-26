@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node ./src/dbSetup && next",
+    "dev": "node ./src/utils/dbStarter.js && next",
     "start": "next start",
     "build": "next build"
   },
