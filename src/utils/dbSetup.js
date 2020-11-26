@@ -3,11 +3,9 @@ const sqlite = require("sqlite");
 const path = require("path");
 
 const openDb = async () => {
-  const dbPath = path.resolve(__dirname, "../../database.db");
-
   try {
     const db = await sqlite.open({
-      filename: dbPath,
+      filename: "./database.sqlite",
       driver: sqlite3.Database,
     });
     return db;
