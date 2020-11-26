@@ -4,6 +4,7 @@ const path = require("path");
 
 async function openDb() {
   const dbPath = path.resolve(__dirname, "../database.db");
+
   return sqlite.open({
     filename: dbPath,
     driver: sqlite3.Database,
@@ -11,7 +12,8 @@ async function openDb() {
 }
 
 async function setup() {
-  const mgPath = path.resolve(__dirname, "./migrations");
+  const mgPath = path.resolve(__dirname, "./migrations/001-initial.sql");
+  console.log("check", mgPath);
   const db = await openDb();
   await db.migrate({
     migrationsPath: mgPath, //add cutom path to your migrations

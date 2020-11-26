@@ -1,10 +1,11 @@
-import { Grid, makeStyles, Typography } from "@material-ui/core";
+import { Grid, makeStyles, Typography, useTheme } from "@material-ui/core";
 import JSONInput from "react-json-editor-ajrm";
 import locale from "react-json-editor-ajrm/locale/en";
 
 const useStyles = makeStyles(() => ({}));
 
 const response = ({ status, statusMsg, data }) => {
+  const theme = useTheme();
   return (
     <Grid container direction="column">
       <Grid item>
@@ -20,6 +21,11 @@ const response = ({ status, statusMsg, data }) => {
           viewOnly
           height="fit-content"
           width="100%"
+          theme={
+            theme.palette.type === "dark"
+              ? "dark_vscode_tribute"
+              : "light_mitsuketa_tribute"
+          }
         />
       </Grid>
     </Grid>
