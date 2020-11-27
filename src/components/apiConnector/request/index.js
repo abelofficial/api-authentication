@@ -67,12 +67,13 @@ const request = (params) => {
       headers[headersObj[id].key] = headersObj[id].value;
     });
 
+    const jsonReq = await JSON.parse(body);
     try {
       const reqResponse = await axios({
         method: method,
         url: `/${url}`,
         headers: headers,
-        data: { data: body },
+        data: jsonReq,
       });
       setreqResponse({
         status: reqResponse.status,

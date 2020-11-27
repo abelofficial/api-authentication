@@ -18,7 +18,7 @@ const handler = nc({ onError, onNoMatch })
   .use(cors())
 
   .post(async (req, res) => {
-    const jsonReq = await JSON.parse(req.body.data);
+    const jsonReq = req.body;
 
     if (!jsonReq.email || !jsonReq.password) {
       res.statusCode = 400;

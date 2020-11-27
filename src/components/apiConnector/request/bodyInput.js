@@ -15,11 +15,6 @@ const body = ({ setBody, placeholder }) => {
     setBody(value);
   };
 
-  // useEffect(() => {
-  //   jsonInput.current.onKeyPressUpdate = editJson;
-  // }, [editJson]);
-
-  // console.log("\n State: ", editJson);
   return (
     <Grid container direction='column'>
       <Grid item>
@@ -44,7 +39,6 @@ const body = ({ setBody, placeholder }) => {
           onKeyPressUpdate={true}
           waitAfterKeyPress={100}
           onChange={(event) => handleWrite(event.json)}
-          // onBlur={() => seteditJson(true)}
         />
       </Grid>
     </Grid>

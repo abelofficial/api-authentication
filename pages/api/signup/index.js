@@ -18,27 +18,29 @@ const handler = nc({ onError, onNoMatch })
   .use(cors())
 
   .post(async (req, res) => {
-    if (!req.body.email || !req.body.password) {
+    const jsonReq = req.body;
+
+    if (!jsonReq.email || !jsonReq.password) {
       res.statusCode = 400;
       res.statusMessage = "Bad request";
-      if (!req.body.email)
+      if (!jsonReq.email)
         res.json({
           message: "Unable to register user",
           detail: "email is a required field",
         });
-      else if (!req.body.password)
+      else if (!jsonReq.password)
         res.json({
           message: "Unable to register user",
           detail: "password is a required field",
         });
     } else {
-      const response = await db.where("email", "==", req.body.email).get();
+      const response = await db.where("email", "==", jsonReq.email).get();
 
       if (response.empty) {
-        hash(req.body.password, 10, async (err, hash) => {
+        hash(jsonReq.password, 10, async (err, hash) => {
           await db.doc(uuid()).set({
-            username: req.body.name,
-            email: req.body.email,
+            username: jsonReq.name,
+            email: jsonReq.email,
             password: hash,
           });
 
@@ -47,8 +49,8 @@ const handler = nc({ onError, onNoMatch })
           res.json({
             message: "User is registered.",
             detail: {
-              username: req.body.name,
-              email: req.body.email,
+              username: jsonReq.name,
+              email: jsonReq.email,
               password: hash,
             },
           });
