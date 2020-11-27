@@ -10,7 +10,11 @@ import { cloneDeep, head } from "lodash";
 import { v4 as uuid } from "uuid";
 import axios from "axios";
 
-const useStyles = makeStyles((theme) => ({}));
+const useStyles = makeStyles((theme) => ({
+  container: {
+    maxWidth: "60rem",
+  },
+}));
 
 const request = (params) => {
   const classes = useStyles();
@@ -68,13 +72,26 @@ const request = (params) => {
         method: method,
         url: `/${url}`,
         headers: headers,
-        data: body,
+        data: { data: body },
       });
       setreqResponse({
         status: reqResponse.status,
         statusMsg: reqResponse.statusText,
         body: reqResponse.data,
       });
+      console.log(method, "   ", url);
+      if (method === "POST" && url == "api/login") {
+        console.log("login found");
+        setHeadersObj((prevVal) => ({
+          ...prevVal,
+          [uuid()]: {
+            key: "Authorization",
+            value: reqResponse.data.authToken,
+            required: true,
+            disabled: true,
+          },
+        }));
+      }
     } catch (error) {
       setreqResponse({
         status: error.response.status,
@@ -82,11 +99,15 @@ const request = (params) => {
         body: error.response.data,
       });
     }
-
-    console.log(reqResponse.status);
   };
+
   return (
-    <Grid container direction="column" spacing={3}>
+    <Grid
+      container
+      direction='column'
+      spacing={3}
+      className={classes.container}
+    >
       <Grid item>
         <Input
           method={method}
