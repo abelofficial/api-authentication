@@ -23,5 +23,5 @@ const json = JSON.parse(jsonStr)
 
 admin.apps.length === 0 ? admin.initializeApp({ credential: admin.credential.cert(json), databaseURL: `${process.env.DATABASE_URL}`}): null
 
-const database = admin.database();
+const database = admin.firestore();
 export default database;

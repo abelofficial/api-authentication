@@ -12,37 +12,14 @@ const body = ({ setBody, placeholder }) => {
   const jsonInput = useRef(null);
 
   const handleWrite = (value) => {
-    seteditJson(false);
     setBody(value);
   };
 
-  const input = useMemo(
-    () => (
-      <JSONInput
-        id='input-body-json'
-        ref={jsonInput}
-        // placeholder={placeholder}
-        locale={locale}
-        height='fit-content'
-        width='100%'
-        theme={
-          theme.palette.type === "dark"
-            ? "dark_vscode_tribute"
-            : "light_mitsuketa_tribute"
-        }
-        onKeyPressUpdate={editJson}
-        waitAfterKeyPress={100}
-        onChange={(event) => handleWrite(event.jsObject)}
-        onBlur={() => seteditJson(true)}
-      />
-    ),
-    [editJson, theme.palette.type]
-  );
   // useEffect(() => {
   //   jsonInput.current.onKeyPressUpdate = editJson;
   // }, [editJson]);
 
-  console.log("\n State: ", editJson);
+  // console.log("\n State: ", editJson);
   return (
     <Grid container direction='column'>
       <Grid item>
@@ -52,7 +29,23 @@ const body = ({ setBody, placeholder }) => {
       </Grid>
 
       <Grid item xs={10}>
-        {input}
+        <JSONInput
+          id='input-body-json'
+          ref={jsonInput}
+          // placeholder={placeholder}
+          locale={locale}
+          height='fit-content'
+          width='100%'
+          theme={
+            theme.palette.type === "dark"
+              ? "dark_vscode_tribute"
+              : "light_mitsuketa_tribute"
+          }
+          onKeyPressUpdate={true}
+          waitAfterKeyPress={100}
+          onChange={(event) => handleWrite(event.json)}
+          // onBlur={() => seteditJson(true)}
+        />
       </Grid>
     </Grid>
   );
