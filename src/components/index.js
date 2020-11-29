@@ -6,15 +6,17 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-
 import Box from "@material-ui/core/Box";
+
+// Core components
+import Request from "./request";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
@@ -34,7 +36,7 @@ TabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `Api-connector-tab-${index}`,
-    "aria-controls": `Preview-backend-${index}`,
+    "aria-controls": `Api-connector-tab-${index}`,
   };
 }
 
@@ -45,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const preview = (params) => {
+const apiConnector = (params) => {
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
@@ -60,17 +62,17 @@ const preview = (params) => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default">
+      <AppBar position='static' color='default'>
         <Tabs
           value={value}
           onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="fullWidth"
-          aria-label="Preview-backend"
+          indicatorColor='primary'
+          textColor='primary'
+          variant='fullWidth'
+          aria-label='Api-connector-tabs'
         >
-          <Tab label="Preview" {...a11yProps("preview")} />
-          <Tab label="Request examples" {...a11yProps("examples")} />
+          <Tab label='Api' {...a11yProps("Api")} />
+          <Tab label='Doc' {...a11yProps("Doc")} />
         </Tabs>
       </AppBar>
       <SwipeableViews
@@ -79,7 +81,7 @@ const preview = (params) => {
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          Item One
+          <Request />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           Item Two
@@ -89,4 +91,4 @@ const preview = (params) => {
   );
 };
 
-export default preview;
+export default apiConnector;

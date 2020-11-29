@@ -2,11 +2,6 @@ import nc from "next-connect";
 import cors from "cors";
 import next from "next";
 
-const sqlite3 = require("sqlite3");
-const sqlite = require("sqlite");
-const path = require("path");
-const DB = require("../../../src/utils/dbSetup.js");
-
 function onError(err, req, res, next) {
   res.status(500).json({ message: err.message });
 }
@@ -14,17 +9,6 @@ function onError(err, req, res, next) {
 function onNoMatch(req, res) {
   res.status(404).json({ message: "The requested endpoint is not supported." });
 }
-
-// async function getDB(req, res) {
-//   const dbPath = path.resolve(__dirname, "./database.db");
-//   console.log(dbPath);
-//   const db = await sqlite.open({
-//     filename: dbPath,
-//     driver: sqlite3.Database,
-//   });
-
-//   return db;
-// }
 
 const handler = nc({ onError, onNoMatch })
   .use(cors())

@@ -1,6 +1,5 @@
 import { Grid, makeStyles } from "@material-ui/core";
-import ApiConnector from "../src/components/apiConnector";
-import Preview from "../src/components/preview";
+import ApiConnector from "../src/components";
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -19,16 +18,13 @@ const index = (params) => {
   return (
     <Grid
       container
-      direction="column"
-      justify="center"
-      alignItems="center"
+      direction='column'
+      justify='center'
+      alignItems='center'
       className={classes.container}
     >
       <Grid className={classes.items} item>
         <ApiConnector></ApiConnector>
-      </Grid>
-      <Grid item className={classes.items}>
-        <Preview></Preview>
       </Grid>
     </Grid>
   );

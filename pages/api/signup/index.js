@@ -3,6 +3,11 @@ import cors from "cors";
 import { hash } from "bcrypt";
 import admin from "../../../src/utils/firebase";
 import { v4 as uuid } from "uuid";
+import {
+  validatePassword,
+  validateEmail,
+  validateString,
+} from "../../../src/utils/apiHelper/validateUserInput";
 
 const db = admin.collection("users");
 
@@ -18,29 +23,19 @@ const handler = nc({ onError, onNoMatch })
   .use(cors())
 
   .post(async (req, res) => {
-    const jsonReq = req.body;
+    try {
+      validateString(req.body.name, "Username");
+      validateEmail(req.body.email);
+      validatePassword(req.body.password);
 
-    if (!jsonReq.email || !jsonReq.password) {
-      res.statusCode = 400;
-      res.statusMessage = "Bad request";
-      if (!jsonReq.email)
-        res.json({
-          message: "Unable to register user",
-          detail: "email is a required field",
-        });
-      else if (!jsonReq.password)
-        res.json({
-          message: "Unable to register user",
-          detail: "password is a required field",
-        });
-    } else {
-      const response = await db.where("email", "==", jsonReq.email).get();
+      const response = await db.where("email", "==", req.body.email).get();
 
       if (response.empty) {
-        hash(jsonReq.password, 10, async (err, hash) => {
-          await db.doc(uuid()).set({
-            username: jsonReq.name,
-            email: jsonReq.email,
+        hash(req.body.password, 10, async (err, hash) => {
+          const userId = uuid();
+          await db.doc(userId).set({
+            username: req.body.name,
+            email: req.body.email,
             password: hash,
           });
 
@@ -49,9 +44,9 @@ const handler = nc({ onError, onNoMatch })
           res.json({
             message: "User is registered.",
             detail: {
-              username: jsonReq.name,
-              email: jsonReq.email,
-              password: hash,
+              userId: userId,
+              username: req.body.name,
+              email: req.body.email,
             },
           });
         });
@@ -59,13 +54,19 @@ const handler = nc({ onError, onNoMatch })
         res.statusCode = 400;
         res.statusMessage = "Bad request";
         res.json({
-          message: "A user with this emai adress is already registered.",
-          detail: {
+          message: "A user with this emai address is already registered.",
+          links: {
             login: "/api/login",
             users: "/api/users",
           },
         });
       }
+    } catch (error) {
+      res.statusCode = 400;
+      res.statusMessage = "Bad request";
+      res.json({
+        message: error.message,
+      });
     }
   });
 
