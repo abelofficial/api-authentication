@@ -25,7 +25,7 @@ const handler = nc({ onError, onNoMatch })
   })
 
   .post(
-    authenticated(async (req, res, id) => {
+    authenticated(async (req, res, userId) => {
       try {
         res.status(200).json({ message: "Not implemented" });
       } catch (error) {

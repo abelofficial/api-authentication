@@ -24,21 +24,21 @@ const handler = nc({ onError, onNoMatch })
         if (!response.empty) {
           const claims = { id: decoded.id, userName: decoded.userName };
           const accessToken = sign(claims, process.env.JWT_GUID, {
-            expiresIn: "10m",
+            expiresIn: "1m",
           });
           res.status(200).json({
             authToken: accessToken,
           });
         } else {
-          res.statusCode = 401;
-          res.statusMessage = "Unauthorized";
+          res.statusCode = 403;
+          res.statusMessage = "Forbidden";
           res.json({
             message: "The refresh token is not a valid token.",
           });
         }
       } else {
-        res.statusCode = 401;
-        res.statusMessage = "Unauthorized";
+        res.statusCode = 403;
+        res.statusMessage = "Forbidden";
         res.json({
           message: "The refresh token is not a valid token.",
         });

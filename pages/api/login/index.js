@@ -43,7 +43,7 @@ const handler = nc({ onError, onNoMatch })
         if (!err && result) {
           const claims = { id: id, userName: name };
           const accessToken = sign(claims, process.env.JWT_GUID, {
-            expiresIn: "10m",
+            expiresIn: "1m",
           });
           const refreshToken = sign(claims, process.env.JWT_GUID);
           res.status(200).json({

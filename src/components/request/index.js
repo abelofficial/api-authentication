@@ -19,7 +19,8 @@ const useStyles = makeStyles((theme) => ({
 const request = (params) => {
   const classes = useStyles();
   const authHeaderId = "AuthTokenHeader";
-  const [newAuthToken, setnewAuthToken] = useState(true);
+
+  const [accessToken, setAccessToken] = useState();
   const [method, setMethod] = useState("GET");
   const [url, setUrl] = useState("api/");
 
@@ -86,11 +87,23 @@ const request = (params) => {
       });
       console.log(method, "   ", url);
       if (method === "POST" && url == "api/login") {
-        localStorage.setItem("accessToken", reqResponse.data.authToken);
+        setAccessToken(reqResponse.data.authToken);
         localStorage.setItem("refreshToken", reqResponse.data.refreshToken);
-        setnewAuthToken(true);
       }
     } catch (error) {
+      console.log(error.response.status);
+      if (
+        error.response.statusText === "Expired token" &&
+        localStorage.getItem("refreshToken") !== null
+      ) {
+        const newToken = await refreshAccessToken(
+          localStorage.getItem("refreshToken")
+        );
+        setAccessToken(newToken);
+
+        console.log("Token refreshed");
+        // handleSubmit();
+      }
       setreqResponse({
         status: error.response.status,
         statusMsg: error.response.statusText,
@@ -109,31 +122,38 @@ const request = (params) => {
     return refreshResp.data.authToken;
   };
 
-  useEffect(() => {
-    setnewAuthToken(localStorage.getItem("accessToken") === null);
-    if (newAuthToken) {
+  useEffect(async () => {
+    if (accessToken) {
       console.log("renderd");
-      setnewAuthToken(false);
+
       setHeadersObj((prevVal) => ({
         ...prevVal,
         [authHeaderId]: {
           key: "Authorization",
-          value: localStorage.getItem("accessToken"),
+          value: accessToken,
           required: true,
-          disabled: true,
+          disabled: false,
           type: "token",
           onRefresh: async () => {
             const newToken = await refreshAccessToken(
               localStorage.getItem("refreshToken")
             );
-            localStorage.setItem("accessToken", newToken);
-            setnewAuthToken(true);
+            setAccessToken(newToken);
           },
-          onLogout: () => {},
+          onLogout: () => {
+            localStorage.removeItem("refreshToken");
+            setAccessToken(null);
+            delete headersObj.authHeaderId;
+          },
         },
       }));
+    } else if (!accessToken && localStorage.getItem("refreshToken") !== null) {
+      const newToken = await refreshAccessToken(
+        localStorage.getItem("refreshToken")
+      );
+      setAccessToken(newToken);
     }
-  }, [newAuthToken]);
+  }, [accessToken]);
 
   return (
     <Grid
