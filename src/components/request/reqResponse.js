@@ -26,7 +26,7 @@ const response = ({ status, statusMsg, data }) => {
     <Grid container direction='column'>
       <Grid item>
         <Typography variant='h6' color='secondary'>
-          Response body {status ? `(${status}: ${statusMsg})` : null}
+          Response {status ? `(${status}: ${statusMsg})` : null}
         </Typography>
       </Grid>
       <Grid item xs={10} className={classes.jsonContainer}>

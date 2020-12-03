@@ -9,6 +9,7 @@ const authenticated = (fn) => async (req, res) => {
         console.log(decoded);
         return await fn(req, res, decoded.id);
       }
+      console.log(err);
       res.statusCode = 401;
       res.statusMessage = "Unauthorized";
       res.json({

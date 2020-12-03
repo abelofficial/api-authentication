@@ -42,10 +42,14 @@ const handler = nc({ onError, onNoMatch })
       compare(req.body.password, password, async (err, result) => {
         if (!err && result) {
           const claims = { id: id, userName: name };
-          const jwt = sign(claims, process.env.JWT_GUID, { expiresIn: "1h" });
+          const accessToken = sign(claims, process.env.JWT_GUID, {
+            expiresIn: "10m",
+          });
+          const refreshToken = sign(claims, process.env.JWT_GUID);
           res.status(200).json({
             message: `Hello ${name} , You can now use the token below.`,
-            authToken: jwt,
+            authToken: accessToken,
+            refreshToken: refreshToken,
           });
         } else {
           res.statusCode = 400;

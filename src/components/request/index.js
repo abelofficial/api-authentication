@@ -5,7 +5,7 @@ import Input from "./requestInput";
 import Headers from "./headerInput";
 import Body from "./bodyInput";
 import Response from "./reqResponse";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cloneDeep, head } from "lodash";
 import { v4 as uuid } from "uuid";
 import axios from "axios";
@@ -18,6 +18,8 @@ const useStyles = makeStyles((theme) => ({
 
 const request = (params) => {
   const classes = useStyles();
+  const authHeaderId = "AuthTokenHeader";
+  const [newAuthToken, setnewAuthToken] = useState(true);
   const [method, setMethod] = useState("GET");
   const [url, setUrl] = useState("api/");
 
@@ -29,7 +31,8 @@ const request = (params) => {
       disabled: true,
     },
   });
-  const [body, setBody] = useState({ id: "abc-675-gshs", name: "hello" });
+
+  const [body, setBody] = useState({});
   const [reqResponse, setreqResponse] = useState({
     status: null,
     statusMsg: null,
@@ -41,11 +44,11 @@ const request = (params) => {
     else setUrl("api/", value);
   };
 
-  const addNewHeader = (event, req = false, disabled = false) => {
+  const addNewHeader = (event, required = false, disabled = false) => {
     const key = uuid();
     setHeadersObj((prevHeaders) => ({
       ...prevHeaders,
-      [key]: { key: "", value: "", required: req, disabled: disabled },
+      [key]: { key: "", value: "", required: required, disabled: disabled },
     }));
   };
   const handleHeaderChange = (id, type, value) => {
@@ -67,7 +70,8 @@ const request = (params) => {
       headers[headersObj[id].key] = headersObj[id].value;
     });
 
-    const jsonReq = await JSON.parse(body);
+    const jsonReq =
+      Object.keys(body).length !== 0 ? await JSON.parse(body) : {};
     try {
       const reqResponse = await axios({
         method: method,
@@ -82,16 +86,9 @@ const request = (params) => {
       });
       console.log(method, "   ", url);
       if (method === "POST" && url == "api/login") {
-        console.log("login found");
-        setHeadersObj((prevVal) => ({
-          ...prevVal,
-          [uuid()]: {
-            key: "Authorization",
-            value: reqResponse.data.authToken,
-            required: true,
-            disabled: true,
-          },
-        }));
+        localStorage.setItem("accessToken", reqResponse.data.authToken);
+        localStorage.setItem("refreshToken", reqResponse.data.refreshToken);
+        setnewAuthToken(true);
       }
     } catch (error) {
       setreqResponse({
@@ -101,6 +98,42 @@ const request = (params) => {
       });
     }
   };
+
+  const refreshAccessToken = async (refreshToken) => {
+    const refreshResp = await axios({
+      method: "get",
+      url: `/api/token`,
+      params: { token: refreshToken },
+    });
+
+    return refreshResp.data.authToken;
+  };
+
+  useEffect(() => {
+    setnewAuthToken(localStorage.getItem("accessToken") === null);
+    if (newAuthToken) {
+      console.log("renderd");
+      setnewAuthToken(false);
+      setHeadersObj((prevVal) => ({
+        ...prevVal,
+        [authHeaderId]: {
+          key: "Authorization",
+          value: localStorage.getItem("accessToken"),
+          required: true,
+          disabled: true,
+          type: "token",
+          onRefresh: async () => {
+            const newToken = await refreshAccessToken(
+              localStorage.getItem("refreshToken")
+            );
+            localStorage.setItem("accessToken", newToken);
+            setnewAuthToken(true);
+          },
+          onLogout: () => {},
+        },
+      }));
+    }
+  }, [newAuthToken]);
 
   return (
     <Grid
@@ -129,15 +162,17 @@ const request = (params) => {
         />
       </Grid>
       <Grid item>
-        <Body setBody={setBody} placeholder={{}} />
+        <Body setBody={setBody} placeholder={body} />
       </Grid>
-      <Grid item>
-        <Response
-          status={reqResponse.status}
-          statusMsg={reqResponse.statusMsg}
-          data={reqResponse.body}
-        />
-      </Grid>
+      {reqResponse.status != null ? (
+        <Grid item>
+          <Response
+            status={reqResponse.status}
+            statusMsg={reqResponse.statusMsg}
+            data={reqResponse.body}
+          />
+        </Grid>
+      ) : null}
     </Grid>
   );
 };

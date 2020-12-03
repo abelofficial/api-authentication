@@ -8,7 +8,6 @@ const useStyles = makeStyles(() => ({}));
 
 const body = ({ setBody, placeholder }) => {
   const theme = useTheme();
-  const [editJson, seteditJson] = useState(false);
   const jsonInput = useRef(null);
 
   const handleWrite = (value) => {
@@ -31,6 +30,7 @@ const body = ({ setBody, placeholder }) => {
           locale={locale}
           height='fit-content'
           width='100%'
+          reset={false}
           theme={
             theme.palette.type === "dark"
               ? "dark_vscode_tribute"
@@ -38,7 +38,10 @@ const body = ({ setBody, placeholder }) => {
           }
           onKeyPressUpdate={true}
           waitAfterKeyPress={100}
-          onChange={(event) => handleWrite(event.json)}
+          onChange={(event) => {
+            handleWrite(event.json);
+            // console.log(jsonInput.current.getCursorPosition());
+          }}
         />
       </Grid>
     </Grid>
