@@ -1,0 +1,59 @@
+{
+    "Login": {
+        "url": "/api/login",
+        "methods":  {
+            "POST": {
+                "Request Body": {
+                    "email": "Jhon@Doe.com",
+                    "password": "jhon1234"
+                },
+                "Response Body": {
+                    "message": "Welcome Jhon",
+                    "authToken": "ACCESS_TOKEN",
+                    "refreshToken": "REFRESH_TOKEN"
+                }
+            }
+        }
+        
+    },
+    "Signup": {
+        "url": "/api/signup",
+        "methods":  {
+            "POST": {
+                "Request Body": {
+                    "name": "Jhon Doe",
+                    "email": "Jhon@Doe.com",
+                    "password": "jhon1234"
+                },
+                "Response Body": {
+                    "message": "Welcome Jhon",
+                    "authToken": "ACCESS_TOKEN",
+                    "refreshToken": "REFRESH_TOKEN"
+                }
+            }
+        }
+        
+    },
+    "Books": {
+        "url": "/api/books",
+        "methods":  {
+            "GET": {
+                "Request Body": {
+                    
+                },
+                "Response Body": {
+                    "message": "Not implemented"  
+                }
+            },
+            "POST": {
+                "Request Body": {
+                    
+                },
+                "Response Body": {
+                    "message": "Not implemented"  
+                }
+            }
+        }
+        
+    }
+}

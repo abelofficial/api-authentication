@@ -20,7 +20,6 @@ const request = (params) => {
   const classes = useStyles();
   const authHeaderId = "AuthTokenHeader";
 
-  const [accessToken, setAccessToken] = useState();
   const [method, setMethod] = useState("GET");
   const [url, setUrl] = useState("api/");
 
@@ -85,13 +84,12 @@ const request = (params) => {
         statusMsg: reqResponse.statusText,
         body: reqResponse.data,
       });
-      console.log(method, "   ", url);
+
       if (method === "POST" && url == "api/login") {
-        setAccessToken(reqResponse.data.authToken);
+        createAuthorizationHeader(reqResponse.data.authToken);
         localStorage.setItem("refreshToken", reqResponse.data.refreshToken);
       }
     } catch (error) {
-      console.log(error.response.status);
       if (
         error.response.statusText === "Expired token" &&
         localStorage.getItem("refreshToken") !== null
@@ -101,7 +99,6 @@ const request = (params) => {
         );
         setAccessToken(newToken);
 
-        console.log("Token refreshed");
         // handleSubmit();
       }
       setreqResponse({
@@ -110,6 +107,38 @@ const request = (params) => {
         body: error.response.data,
       });
     }
+  };
+
+  const createAuthorizationHeader = (token) => {
+    setHeadersObj((prevVal) => ({
+      ...prevVal,
+      [authHeaderId]: {
+        key: "Authorization",
+        value: token,
+        required: true,
+        disabled: false,
+        type: "token",
+        onRefresh: async () => {
+          const newToken = await refreshAccessToken(
+            localStorage.getItem("refreshToken")
+          );
+        },
+        onLogout: () => {
+          localStorage.removeItem("refreshToken");
+          removeHeader(authHeaderId);
+        },
+      },
+    }));
+  };
+
+  const accessToken = async () => {
+    const savedRefreshToken = localStorage.getItem("refreshToken");
+
+    if (savedRefreshToken) {
+      const newToken = await refreshAccessToken(savedRefreshToken);
+      return newToken;
+    }
+    return;
   };
 
   const refreshAccessToken = async (refreshToken) => {
@@ -123,37 +152,9 @@ const request = (params) => {
   };
 
   useEffect(async () => {
-    if (accessToken) {
-      console.log("renderd");
-
-      setHeadersObj((prevVal) => ({
-        ...prevVal,
-        [authHeaderId]: {
-          key: "Authorization",
-          value: accessToken,
-          required: true,
-          disabled: false,
-          type: "token",
-          onRefresh: async () => {
-            const newToken = await refreshAccessToken(
-              localStorage.getItem("refreshToken")
-            );
-            setAccessToken(newToken);
-          },
-          onLogout: () => {
-            localStorage.removeItem("refreshToken");
-            setAccessToken(null);
-            delete headersObj.authHeaderId;
-          },
-        },
-      }));
-    } else if (!accessToken && localStorage.getItem("refreshToken") !== null) {
-      const newToken = await refreshAccessToken(
-        localStorage.getItem("refreshToken")
-      );
-      setAccessToken(newToken);
-    }
-  }, [accessToken]);
+    const token = await accessToken();
+    token ? createAuthorizationHeader(token) : null;
+  }, []);
 
   return (
     <Grid

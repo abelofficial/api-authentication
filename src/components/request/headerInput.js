@@ -71,7 +71,7 @@ const headertInput = ({
                 </IconButton>
               </Grid>
               <Grid item xs={1}>
-                <IconButton onClick={() => removeHeader(id)}>
+                <IconButton onClick={() => headersObj[id].onLogout()}>
                   <ExitToAppIcon className={classes.infoButton} />
                 </IconButton>
               </Grid>

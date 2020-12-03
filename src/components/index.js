@@ -10,6 +10,7 @@ import Box from "@material-ui/core/Box";
 
 // Core components
 import Request from "./request";
+import Doc from "./Documentation";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -50,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 const apiConnector = (params) => {
   const classes = useStyles();
   const theme = useTheme();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(1);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -84,7 +85,7 @@ const apiConnector = (params) => {
           <Request />
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
-          Item Two
+          <Doc />
         </TabPanel>
       </SwipeableViews>
     </div>
