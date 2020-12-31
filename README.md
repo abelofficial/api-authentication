@@ -31,8 +31,7 @@ At present, This site officially aim to support the last two versions of the fol
 
 ## Resources
 
-- Issues: [Github Issues Page](https://github.com/abelofficial/vlam/issues)
-- Progress board: [Git-flow board](https://github.com/abelofficial/vlam/projects/1)
+- Issues: [Github Issues Page](https://github.com/abelofficial/api-authentication/issues)
 
 ## Reporting Issues
 
